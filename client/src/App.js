@@ -13,6 +13,8 @@ import Login from "./pages/Login";
 import PrivateRoute from "./routes/ProtectedRoute";
 import Register from "./pages/Register";
 import RoleBasedDashboard from "./scenes/dashboard/RoleBasedDashboard";
+import RoleBasedPie from "./components/RoleBasedPie";
+import EmployeeLogs from "./scenes/logs/EmployeeLogs";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -37,8 +39,9 @@ function App() {
                       <Route path="/" element={<RoleBasedDashboard />} />
                       <Route path="/team" element={<Team />} />
                       <Route path="/contacts" element={<Contacts />} />
+                      <Route path="/logs" element={<EmployeeLogs />} />
                       <Route path="/form" element={<Form />} />
-                      <Route path="/pie" element={<Pie />} />
+                      <Route path="/pie" element={<RoleBasedPie />} />
                       <Route path="/calendar" element={<Calendar />} />
                     </Routes>
                   </main>

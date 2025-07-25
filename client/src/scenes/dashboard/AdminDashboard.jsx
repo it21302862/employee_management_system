@@ -48,7 +48,7 @@ const AdminDashboard = () => {
 
   const fetchAttendanceData = () => {
     const token = localStorage.getItem("token");
-    const selectedDate = date.toISOString().split("T")[0];
+    const selectedDate = date.toLocaleDateString("en-CA");
     axios
       .get(`http://localhost:8000/api/admin/attendance?date=${selectedDate}`, {
         headers: {

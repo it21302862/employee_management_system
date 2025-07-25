@@ -43,14 +43,17 @@ export async function checkOut(req, res) {
 
 export async function myLogs(req, res) {
   try {
-    const logs = await Attendance.find({ user: req.user.id }).sort({ timestamp: -1 });
+    const logs = await Attendance.find({
+      user: req.user.id,
+      note: { $nin: [null, ""] } 
+    }).sort({ timestamp: -1 });
 
     const formattedLogs = logs.map(log => ({
       _id: log._id,
       type: log.type,
       date: moment(log.timestamp).format("YYYY-MM-DD"),
       time: moment(log.timestamp).format("HH:mm:ss"),
-      reason: log.note || "", 
+      reason: log.note || "",
       createdAt: log.createdAt,
       updatedAt: log.updatedAt
     }));

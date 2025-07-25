@@ -17,6 +17,7 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import { useAuth } from "../../context/AuthContext";
+import HistoryIcon from '@mui/icons-material/History';
 import axios from "axios";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -191,6 +192,13 @@ const Sidebar = () => {
               title="Contacts Information"
               to="/contacts"
               icon={<ContactsOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+             <Item
+              title="Employee Logs"
+              to="/logs"
+              icon={<HistoryIcon />}
               selected={selected}
               setSelected={setSelected}
             />
