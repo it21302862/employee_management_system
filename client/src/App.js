@@ -16,6 +16,7 @@ import Register from "./pages/Register";
 import RoleBasedDashboard from "./scenes/dashboard/RoleBasedDashboard";
 import RoleBasedPie from "./components/RoleBasedPie";
 import EmployeeLogs from "./scenes/logs/EmployeeLogs";
+import RoleBasedLogs from "./scenes/logs/RoleBasedLogs";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -40,7 +41,7 @@ function App() {
                       <Route path="/" element={<RoleBasedDashboard />} />
                       <Route path="/team" element={<Team />} />
                       <Route path="/contacts" element={<Contacts />} />
-                      <Route path="/logs" element={<EmployeeLogs />} />
+                      <Route path="/logs" element={<RoleBasedLogs />} />
                       <Route path="/form" element={<Form />} />
                       <Route path="/pie" element={<RoleBasedPie />} />
                       <Route path="/line" element={<Line />} />

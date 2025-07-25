@@ -119,8 +119,27 @@ const Dashboard = () => {
       field: "status",
       headerName: "Status",
       flex: 1,
-      renderCell: ({ row: { status } }) => {
-        const isPresent = status === "Present";
+      renderCell: ({ row }) => {
+        const { startTime, endTime } = row;
+    
+        let status = "Absent";
+        let bgColor = theme.palette.error.main;
+        let icon = <HighlightOffIcon sx={{ mr: "6px" }} />;
+    
+        if (startTime && endTime) {
+          status = "Present";
+          bgColor = colors.greenAccent[600];
+          icon = <CheckCircleOutlineIcon sx={{ mr: "6px" }} />;
+        } else if (startTime && !endTime) {
+          status = "Incomplete";
+          bgColor = colors.yellowAccent?.[600] || "#FFFFCC";
+          icon = <HighlightOffIcon sx={{ mr: "6px" }} />;
+        } else if (!startTime && endTime) {
+          status = "Incomplete";
+          bgColor = colors.yellowAccent?.[600] || "#facc15";
+          icon = <HighlightOffIcon sx={{ mr: "6px" }} />;
+        }
+    
         return (
           <Box
             display="flex"
@@ -130,18 +149,12 @@ const Dashboard = () => {
             borderRadius="4px"
             width="100%"
             sx={{
-              backgroundColor: isPresent
-                ? colors.greenAccent[600]
-                : theme.palette.error.main,
-              color: colors.grey[100],
+              backgroundColor: bgColor,
+              color: colors.grey[900],
             }}
           >
-            {isPresent ? (
-              <CheckCircleOutlineIcon sx={{ mr: "6px" }} />
-            ) : (
-              <HighlightOffIcon sx={{ mr: "6px" }} />
-            )}
-            <Typography>{status}</Typography>
+            {icon}
+            <Typography fontWeight="bold">{status}</Typography>
           </Box>
         );
       },
@@ -160,7 +173,7 @@ const Dashboard = () => {
             <Button
               sx={{
                 backgroundColor: colors.blueAccent[700],
-                color: colors.grey[100],
+                color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
                 fontSize: { xs: "12px", sm: "14px" },
                 fontWeight: "bold",
                 px: { xs: 2, sm: 3 },
@@ -174,7 +187,7 @@ const Dashboard = () => {
             <Button
               sx={{
                 backgroundColor: colors.greenAccent[600],
-                color: colors.grey[900],
+                color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
                 fontSize: { xs: "12px", sm: "14px" },
                 fontWeight: "bold",
                 px: { xs: 2, sm: 3 },
@@ -242,7 +255,7 @@ const Dashboard = () => {
             onClick={handleSubmit}
             sx={{
               backgroundColor: theme.palette.mode === 'dark' ? colors.greenAccent[600] : colors.greenAccent[400],
-              color: theme.palette.mode === 'dark' ? colors.grey[900] : colors.grey[100],
+              color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900],
             }}
           >
             {dialogType === "check-in" ? "Submit Check-In" : "Submit Check-Out"}
