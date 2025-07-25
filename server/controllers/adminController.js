@@ -124,3 +124,73 @@ export async function allLogs(req, res) {
     res.status(500).json({ msg: 'Server error' });
   }
 }
+
+export async function workingHoursPerMonth(req, res) {
+  try {
+    // Fetch all users (employees only)
+    const users = await User.find({ role: "employee" });
+
+    // Fetch all attendance logs
+    const logs = await Attendance.find({}).sort({ timestamp: 1 });
+
+    // Group logs per user
+    const userLogsMap = {};
+
+    logs.forEach((log) => {
+      const userId = log.user.toString();
+      if (!userLogsMap[userId]) {
+        userLogsMap[userId] = [];
+      }
+      userLogsMap[userId].push(log);
+    });
+
+    const result = [];
+
+    for (const user of users) {
+      const monthlyData = {};
+
+      const logs = userLogsMap[user._id.toString()] || [];
+
+      // Pair check-in and check-out
+      for (let i = 0; i < logs.length - 1; i++) {
+        const logIn = logs[i];
+        const logOut = logs[i + 1];
+
+        if (logIn.type === "check-in" && logOut.type === "check-out") {
+          const inTime = moment(logIn.timestamp);
+          const outTime = moment(logOut.timestamp);
+
+          // Check if same day and valid range
+          if (outTime.isAfter(inTime) && outTime.diff(inTime, "hours") < 24) {
+            const month = inTime.format("MMM");
+
+            const durationHours = outTime.diff(inTime, "hours", true);
+
+            if (!monthlyData[month]) {
+              monthlyData[month] = 0;
+            }
+
+            monthlyData[month] += durationHours;
+            i++; // skip next log as it's already used
+          }
+        }
+      }
+
+      // Format for Nivo line chart
+      const data = Object.entries(monthlyData).map(([month, hours]) => ({
+        x: month,
+        y: parseFloat(hours.toFixed(2))
+      }));
+
+      result.push({
+        id: user.name,
+        data
+      });
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error("Error calculating working hours:", err);
+    res.status(500).json({ msg: "Server error" });
+  }
+}

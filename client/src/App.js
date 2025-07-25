@@ -6,6 +6,7 @@ import Team from "./scenes/team";
 import Contacts from "./scenes/contacts";
 import Form from "./scenes/form";
 import Pie from "./scenes/pie";
+import Line from "./scenes/line";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
@@ -42,6 +43,7 @@ function App() {
                       <Route path="/logs" element={<EmployeeLogs />} />
                       <Route path="/form" element={<Form />} />
                       <Route path="/pie" element={<RoleBasedPie />} />
+                      <Route path="/line" element={<Line />} />
                       <Route path="/calendar" element={<Calendar />} />
                     </Routes>
                   </main>
