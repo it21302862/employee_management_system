@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
-import Dashboard from "./scenes/dashboard";
 import Team from "./scenes/team";
 import Contacts from "./scenes/contacts";
 import Form from "./scenes/form";
@@ -13,6 +12,7 @@ import Calendar from "./scenes/calendar/calendar";
 import Login from "./pages/Login";
 import PrivateRoute from "./routes/ProtectedRoute";
 import Register from "./pages/Register";
+import RoleBasedDashboard from "./scenes/dashboard/RoleBasedDashboard";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -34,7 +34,7 @@ function App() {
                   <main className="content">
                     <Topbar setIsSidebar={setIsSidebar} />
                     <Routes>
-                      <Route path="/" element={<Dashboard />} />
+                      <Route path="/" element={<RoleBasedDashboard />} />
                       <Route path="/team" element={<Team />} />
                       <Route path="/contacts" element={<Contacts />} />
                       <Route path="/form" element={<Form />} />

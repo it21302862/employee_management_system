@@ -4,9 +4,9 @@ import { checkIn, checkOut, myLogs, getLogForDate, getTimeSummary,getDashboardSu
 import { auth, authorize } from '../middleware/auth.js';
 
 // Check-in
-router.post('/check-in', auth, authorize('employee'), checkIn);
+router.post('/check-in', auth, authorize('employee', 'admin'), checkIn);
 // Check-out
-router.post('/check-out', auth, authorize('employee'), checkOut);
+router.post('/check-out', auth, authorize('employee' , 'admin'), checkOut);
 // View own logs
 router.get('/my-logs', auth, authorize('employee'), myLogs);
 //get log for a date

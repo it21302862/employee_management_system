@@ -8,4 +8,5 @@ router.get('/attendance', auth, authorize('admin'), allAttendance);
 // View all employees
 router.get('/employees', auth, authorize('admin'), allEmployees);
 
+
 export default router; 

@@ -22,6 +22,12 @@ const userSchema = new Schema({
     enum: ['employee', 'admin'],
     default: 'employee',
   },
+  employeeId: {
+    type: String,
+    unique: true,
+    sparse: true, 
+    trim: true,
+  },
   profileImage: {
     type: String, 
     default: '',  
