@@ -12,7 +12,7 @@ export async function register(req, res) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password,profileImage,position } = req.body;
 
   try {
     let user = await User.findOne({ email });
@@ -22,7 +22,7 @@ export async function register(req, res) {
 
     const hashedPassword = await hash(password, 10); 
 
-    user = new User({ name, email, password: hashedPassword });
+    user = new User({ name, email, password: hashedPassword , profileImage, position });
 
     await user.save();
 
@@ -32,11 +32,15 @@ export async function register(req, res) {
       { expiresIn: '1d' }
     );
 
-    res.status(201).json({ token });
+    // remove password before sending
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    res.status(201).json({ user: userWithoutPassword, token });
   } catch (err) {
     res.status(500).json({ msg: 'Server error' });
   }
 }
+
 
 
 export async function login(req, res) {
@@ -44,19 +48,29 @@ export async function login(req, res) {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+  
   const { email, password } = req.body;
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
+
     const isMatch = await compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
-    const token = sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    res.json({ token });
+
+    const token = sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: '1d',
+    });
+
+    // remove password before sending
+    const { password: _, ...userWithoutPassword } = user.toObject();
+
+    res.json({ user: userWithoutPassword, token });
   } catch (err) {
     res.status(500).json({ msg: 'Server error' });
   }
-} 
+}

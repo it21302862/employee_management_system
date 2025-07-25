@@ -22,6 +22,14 @@ const userSchema = new Schema({
     enum: ['employee', 'admin'],
     default: 'employee',
   },
+  profileImage: {
+    type: String, 
+    default: '',  
+  },
+  position:{
+    type:String,
+    required: true
+  }
 }, { timestamps: true });
 
 export default model('User', userSchema); 

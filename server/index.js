@@ -9,6 +9,9 @@ import authRoutes from './routes/auth.js';
 import attendanceRoutes from './routes/attendance.js';
 import adminRoutes from './routes/admin.js';
 import profileRoutes from './routes/profile.js';
+import path from 'path';
+
+const __dirname = path.resolve();
 
 const app = express();
 dotenv.config();
@@ -29,7 +32,10 @@ const connect = () => {
 app.use(json());
 app.use(cookieParser())
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5000',
+  credentials: true, 
+}));
 app.use(helmet());
 app.use(morgan('dev'));
 
@@ -54,9 +60,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(8000, () => {
+app.listen(process.env.PORT, () => {
   connect();
-  console.log("Connected to Server");
+  console.log("Connected to Employee Server");
 });
 
 
