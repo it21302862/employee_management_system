@@ -26,10 +26,36 @@ const userSchema = new Schema({
     type: String, 
     default: '',  
   },
-  position:{
-    type:String,
-    required: true
+  position: {
+    type: String,
+    required: true,
+  },
+  age: {
+    type: Number,
+    min: 18,
+    max: 100,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  address: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  city: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  zipCode: {
+    type: String,
+    required: true,
+    trim: true,
   }
 }, { timestamps: true });
 
-export default model('User', userSchema); 
+export default model('User', userSchema);

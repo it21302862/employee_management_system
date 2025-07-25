@@ -1,18 +1,35 @@
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+} from "@mui/material";
 import { tokens } from "../../theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import Header from "../../components/Header";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [attendanceData, setAttendanceData] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogType, setDialogType] = useState("check-in"); // or "check-out"
+  const [note, setNote] = useState("");
+  const [date, setDate] = useState(new Date());
 
   const formatTimeTo12Hour = (timeStr) => {
     if (!timeStr) return "";
@@ -26,9 +43,8 @@ const Dashboard = () => {
     });
   };
 
-  useEffect(() => {
+  const fetchAttendanceData = () => {
     const token = localStorage.getItem("token");
-
     axios
       .get("http://localhost:8000/api/attendance/dash-summary", {
         headers: {
@@ -45,7 +61,42 @@ const Dashboard = () => {
       .catch((error) => {
         console.error("Error fetching attendance data:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchAttendanceData();
   }, []);
+
+  const handleOpenDialog = (type) => {
+    setDialogType(type);
+    setNote("");
+    setDate(new Date());
+    setDialogOpen(true);
+  };
+
+  const handleSubmit = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.post(
+        `http://localhost:8000/api/attendance/${dialogType}`,
+        {
+          date: date.toISOString().split("T")[0],
+          note,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setDialogOpen(false);
+      fetchAttendanceData();
+    } catch (error) {
+      console.error(`Error during ${dialogType}:`, error);
+      alert(error?.response?.data?.msg || "Something went wrong.");
+    }
+  };
 
   const columns = [
     { field: "date", headerName: "Date", flex: 1 },
@@ -61,7 +112,6 @@ const Dashboard = () => {
       flex: 1,
       valueGetter: (params) => formatTimeTo12Hour(params.row.endTime),
     },
-
     { field: "workingHours", headerName: "Working Hours", flex: 1 },
     {
       field: "status",
@@ -69,7 +119,6 @@ const Dashboard = () => {
       flex: 1,
       renderCell: ({ row: { status } }) => {
         const isPresent = status === "Present";
-
         return (
           <Box
             display="flex"
@@ -101,7 +150,7 @@ const Dashboard = () => {
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header title="DASHBOARD" subtitle="Welcome to your attendance records" />
         <Box>
           <Button
             sx={{
@@ -110,43 +159,99 @@ const Dashboard = () => {
               fontSize: "14px",
               fontWeight: "bold",
               padding: "10px 20px",
+              marginRight: "10px",
             }}
+            onClick={() => handleOpenDialog("check-in")}
           >
-            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
+            Check-In
+          </Button>
+          <Button
+            sx={{
+              backgroundColor: colors.greenAccent[600],
+              color: colors.grey[900],
+              fontSize: "14px",
+              fontWeight: "bold",
+              padding: "10px 20px",
+            }}
+            onClick={() => handleOpenDialog("check-out")}
+          >
+            Check-Out
           </Button>
         </Box>
       </Box>
 
+      {/* POPUP DIALOG */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>
+          {dialogType === "check-in" ? "Check In" : "Check Out"}
+        </DialogTitle>
+        <DialogContent>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="Select Date"
+              value={date}
+              onChange={(newDate) => setDate(newDate)}
+              renderInput={(params) => (
+                <TextField fullWidth sx={{ mt: 2 }} {...params} />
+              )}
+            />
+          </LocalizationProvider>
+          <TextField
+            margin="dense"
+            label="Note"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            sx={{ mt: 2 }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
+          <Button onClick={handleSubmit}>
+            {dialogType === "check-in" ? "Submit Check-In" : "Submit Check-Out"}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {/* TABLE */}
-      <Box
-        mt="40px"
-        height="400px"
-        sx={{
-          "& .MuiDataGrid-root": { border: "none" },
-          "& .MuiDataGrid-cell": { borderBottom: "none" },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-        }}
-      >
-        <Typography variant="h5" color={colors.grey[100]} mb={2}>
-          Attendance Summary
-        </Typography>
-        <DataGrid rows={attendanceData} columns={columns} />
+      {/* TABLE */}
+<Box
+  mt="40px"
+  height="400px"
+  sx={{
+    "& .MuiDataGrid-root": { border: "none" },
+    "& .MuiDataGrid-cell": { borderBottom: "none" },
+    "& .MuiDataGrid-columnHeaders": {
+      backgroundColor: colors.blueAccent[700],
+      borderBottom: "none",
+    },
+    "& .MuiDataGrid-virtualScroller": {
+      backgroundColor: colors.primary[400],
+    },
+    "& .MuiDataGrid-footerContainer": {
+      borderTop: "none",
+      backgroundColor: colors.blueAccent[700],
+    },
+    "& .MuiCheckbox-root": {
+      color: `${colors.greenAccent[200]} !important`,
+    },
+    "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+      color: `${colors.grey[100]} !important`,
+    },
+  }}
+>
+  <Typography variant="h5" color={colors.grey[100]} mb={2}>
+    Attendance Summary
+  </Typography>
+  <DataGrid
+    rows={attendanceData}
+    columns={columns}
+    components={{ Toolbar: GridToolbar }}
+  />
+</Box>
       </Box>
-    </Box>
   );
 };
 

@@ -1,94 +1,128 @@
-import { Box } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Avatar,
+  useTheme,
+  Grid,
+  Divider,
+} from "@mui/material";
 import { tokens } from "../../theme";
 import Header from "../../components/Header";
-import { useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Contacts = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [user, setUser] = useState(null);
 
-  const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
-    {
-      field: "name",
-      headerName: "Name",
-      flex: 1,
-      cellClassName: "name-column--cell",
-    },
-    {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "phone",
-      headerName: "Phone Number",
-      flex: 1,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      flex: 1,
-    },
-    {
-      field: "address",
-      headerName: "Address",
-      flex: 1,
-    },
-    {
-      field: "city",
-      headerName: "City",
-      flex: 1,
-    },
-    {
-      field: "zipCode",
-      headerName: "Zip Code",
-      flex: 1,
-    },
-  ];
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token"); 
+        const res = await axios.get("http://localhost:8000/api/profile/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(res.data);
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  if (!user) return <Typography>Loading...</Typography>;
 
   return (
     <Box m="20px">
-      <Header
-        title="CONTACTS"
-        subtitle="List of Contacts for Future Reference"
-      />
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
+      <Header title="CONTACT PROFILE" subtitle="User Profile" />
+
+      <Box display="flex" justifyContent="center" mt="40px">
+        <Card
+          sx={{
+            width: "100%",
+            maxWidth: 900,
+            display: "flex",
             backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
-        }}
-      >
+            boxShadow: 6,
+            borderRadius: "16px",
+          }}
+        >
+          {/* Left Side */}
+          <Box
+            sx={{
+              width: "40%",
+              backgroundColor: colors.blueAccent[700],
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "30px",
+              borderTopLeftRadius: "16px",
+              borderBottomLeftRadius: "16px",
+              color: colors.grey[100],
+            }}
+          >
+            <Avatar
+              src={user.profileImage}
+              sx={{
+                width: 140,
+                height: 140,
+                fontSize: 50,
+                bgcolor: colors.greenAccent[500],
+                mb: 3,
+              }}
+            >
+              {!user.profileImage && user.name.split(" ").map((n) => n[0]).join("")}
+            </Avatar>
+            <Typography variant="h4" gutterBottom>
+              {user.name}
+            </Typography>
+            <Typography variant="body1">Role: {user.role}</Typography>
+            <Typography variant="body1">Position: {user.position}</Typography>
+            <Typography variant="body1">Age: {user.age}</Typography>
+          </Box>
+
+          {/* Right Side */}
+          <CardContent
+            sx={{
+              width: "60%",
+              padding: "30px",
+              color: colors.grey[100],
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom>
+                  Contact Information
+                </Typography>
+                <Divider sx={{ mb: 2, backgroundColor: colors.grey[600] }} />
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1"><strong>Email:</strong> {user.email}</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1"><strong>Phone:</strong> {user.phone}</Typography>
+              </Grid>
+              <Grid item xs={12} mt={2}>
+                <Typography variant="h6" gutterBottom>
+                  Address
+                </Typography>
+                <Divider sx={{ mb: 2, backgroundColor: colors.grey[600] }} />
+                <Typography variant="body1">{user.address}</Typography>
+                <Typography variant="body1">{user.city}, {user.zipCode}</Typography>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
       </Box>
     </Box>
   );

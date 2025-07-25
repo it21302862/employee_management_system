@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@date-io/date-fns": "^2.14.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@fullcalendar/core": "^5.11.3",
@@ -14,6 +15,7 @@
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.5",
     "@mui/x-data-grid": "^5.17.2",
+    "@mui/x-date-pickers": "^5.0.0",
     "@nivo/bar": "^0.80.0",
     "@nivo/core": "^0.79.0",
     "@nivo/geo": "^0.80.0",
@@ -25,6 +27,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.11.0",
     "chart.js": "^3.9.1",
+    "date-fns": "^2.29.3",
     "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
