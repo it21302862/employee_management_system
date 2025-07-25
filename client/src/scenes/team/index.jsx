@@ -120,6 +120,7 @@ const Team = () => {
           },
           "& .MuiDataGrid-footerContainer": {
             backgroundColor: colors.blueAccent[700],
+            borderTop: "none",
           },
         }}
       >
