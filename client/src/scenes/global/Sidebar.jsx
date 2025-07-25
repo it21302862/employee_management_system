@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography, useTheme, Drawer, useMediaQuery } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
@@ -24,6 +24,14 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  // Clone the icon and inject a color prop
+  const coloredIcon = icon &&
+    (typeof icon.type === 'function'
+      ? React.cloneElement(icon, {
+          sx: { color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] },
+        })
+      : icon);
+
   return (
     <MenuItem
       active={selected === title}
@@ -31,7 +39,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
         color: colors.grey[100],
       }}
       onClick={() => setSelected(title)}
-      icon={icon}
+      icon={coloredIcon}
     >
       <Typography>{title}</Typography>
       <Link to={to} />
@@ -46,6 +54,8 @@ const Sidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
   const { user } = useAuth();
   const [summaryData, setSummaryData] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     const fetchSummary = async () => {
@@ -79,7 +89,7 @@ const Sidebar = () => {
     return result.trim() || "0 min";
   };
 
-  return (
+  const sidebarContent = (
     <Box
       sx={{
         "& .pro-sidebar-inner": {
@@ -104,7 +114,7 @@ const Sidebar = () => {
           {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
-            icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
+            icon={isCollapsed ? <MenuOutlinedIcon sx={{ color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] }} /> : undefined}
             style={{
               margin: "10px 0 20px 0",
               color: colors.grey[100],
@@ -121,7 +131,7 @@ const Sidebar = () => {
                   EMPLOYEE
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                  <MenuOutlinedIcon />
+                  <MenuOutlinedIcon sx={{ color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] }} />
                 </IconButton>
               </Box>
             )}
@@ -169,7 +179,7 @@ const Sidebar = () => {
             <Item
               title="Dashboard"
               to="/"
-              icon={<HomeOutlinedIcon />}
+              icon={<HomeOutlinedIcon sx={{ color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] }} />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -184,21 +194,21 @@ const Sidebar = () => {
             <Item
               title="Manage Team"
               to="/team"
-              icon={<PeopleOutlinedIcon />}
+              icon={<PeopleOutlinedIcon sx={{ color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] }} />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
               title="Contacts Information"
               to="/contacts"
-              icon={<ContactsOutlinedIcon />}
+              icon={<ContactsOutlinedIcon sx={{ color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] }} />}
               selected={selected}
               setSelected={setSelected}
             />
              <Item
               title="Employee Logs"
               to="/logs"
-              icon={<HistoryIcon />}
+              icon={<HistoryIcon sx={{ color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] }} />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -220,7 +230,7 @@ const Sidebar = () => {
             <Item
               title="Calendar"
               to="/calendar"
-              icon={<CalendarTodayOutlinedIcon />}
+              icon={<CalendarTodayOutlinedIcon sx={{ color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] }} />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -235,7 +245,7 @@ const Sidebar = () => {
             <Item
               title="Work Chart"
               to="/pie"
-              icon={<PieChartOutlineOutlinedIcon />}
+              icon={<PieChartOutlineOutlinedIcon sx={{ color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900] }} />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -244,6 +254,24 @@ const Sidebar = () => {
       </ProSidebar>
     </Box>
   );
-};
+
+  if (isMobile) {
+    return (
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+        }}
+      >
+        {sidebarContent}
+      </Drawer>
+    );
+  }
+
+  return sidebarContent;
+}
 
 export default Sidebar;

@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Grid,
 } from "@mui/material";
 import { tokens } from "../../theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -147,38 +148,44 @@ const Dashboard = () => {
   ];
 
   return (
-    <Box m="20px">
+    <Box sx={{ m: { xs: 1, sm: 2, md: 3 } }}>
       {/* HEADER */}
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your attendance records" />
-        <Box>
-          <Button
-            sx={{
-              backgroundColor: colors.blueAccent[700],
-              color: colors.grey[100],
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-              marginRight: "10px",
-            }}
-            onClick={() => handleOpenDialog("check-in")}
-          >
-            Check-In
-          </Button>
-          <Button
-            sx={{
-              backgroundColor: colors.greenAccent[600],
-              color: colors.grey[900],
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
-            onClick={() => handleOpenDialog("check-out")}
-          >
-            Check-Out
-          </Button>
-        </Box>
-      </Box>
+      <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+        <Grid item xs={12} md={8}>
+          <Header title="DASHBOARD" subtitle="Welcome to your attendance records" />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Box sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' }, gap: 2, mt: { xs: 2, md: 0 } }}>
+            <Button
+              sx={{
+                backgroundColor: colors.blueAccent[700],
+                color: colors.grey[100],
+                fontSize: { xs: "12px", sm: "14px" },
+                fontWeight: "bold",
+                px: { xs: 2, sm: 3 },
+                py: { xs: 1, sm: 1.5 },
+                mr: { xs: 1, md: 2 },
+              }}
+              onClick={() => handleOpenDialog("check-in")}
+            >
+              Check-In
+            </Button>
+            <Button
+              sx={{
+                backgroundColor: colors.greenAccent[600],
+                color: colors.grey[900],
+                fontSize: { xs: "12px", sm: "14px" },
+                fontWeight: "bold",
+                px: { xs: 2, sm: 3 },
+                py: { xs: 1, sm: 1.5 },
+              }}
+              onClick={() => handleOpenDialog("check-out")}
+            >
+              Check-Out
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
 
       {/* POPUP DIALOG */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
@@ -216,42 +223,43 @@ const Dashboard = () => {
       </Dialog>
 
       {/* TABLE */}
-      {/* TABLE */}
-<Box
-  mt="40px"
-  height="400px"
-  sx={{
-    "& .MuiDataGrid-root": { border: "none" },
-    "& .MuiDataGrid-cell": { borderBottom: "none" },
-    "& .MuiDataGrid-columnHeaders": {
-      backgroundColor: colors.blueAccent[700],
-      borderBottom: "none",
-    },
-    "& .MuiDataGrid-virtualScroller": {
-      backgroundColor: colors.primary[400],
-    },
-    "& .MuiDataGrid-footerContainer": {
-      borderTop: "none",
-      backgroundColor: colors.blueAccent[700],
-    },
-    "& .MuiCheckbox-root": {
-      color: `${colors.greenAccent[200]} !important`,
-    },
-    "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-      color: `${colors.grey[100]} !important`,
-    },
-  }}
->
-  <Typography variant="h5" color={colors.grey[100]} mb={2}>
-    Attendance Summary
-  </Typography>
-  <DataGrid
-    rows={attendanceData}
-    columns={columns}
-    components={{ Toolbar: GridToolbar }}
-  />
-</Box>
+      <Box
+        mt={{ xs: 2, md: 5 }}
+        height={{ xs: 300, sm: 400 }}
+        sx={{
+          width: '100%',
+          overflowX: 'auto',
+          "& .MuiDataGrid-root": { border: "none" },
+          "& .MuiDataGrid-cell": { borderBottom: "none" },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+          "& .MuiCheckbox-root": {
+            color: `${colors.greenAccent[200]} !important`,
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
+          },
+        }}
+      >
+        <Typography variant="h5" color={colors.grey[100]} mb={2} sx={{ fontSize: { xs: '1.1rem', sm: '1.5rem' } }}>
+          Attendance Summary
+        </Typography>
+        <DataGrid
+          rows={attendanceData}
+          columns={columns}
+          components={{ Toolbar: GridToolbar }}
+        />
       </Box>
+    </Box>
   );
 };
 
