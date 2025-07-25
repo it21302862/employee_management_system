@@ -21,6 +21,7 @@ import axios from "axios";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import React from "react";
 
 const AdminDashboard = () => {
   const theme = useTheme();
@@ -171,7 +172,7 @@ const AdminDashboard = () => {
         <Grid item xs={12} md={8}>
           <Header
             title="DASHBOARD"
-            subtitle="Welcome to your attendance records"
+            subtitle="Welcome to attendance records"
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -179,7 +180,7 @@ const AdminDashboard = () => {
             <Button
               sx={{
                 backgroundColor: colors.blueAccent[700],
-                color: colors.grey[100],
+                color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
                 fontSize: { xs: "12px", sm: "14px" },
                 fontWeight: "bold",
                 px: { xs: 2, sm: 3 },
@@ -193,7 +194,7 @@ const AdminDashboard = () => {
             <Button
               sx={{
                 backgroundColor: colors.greenAccent[600],
-                color: colors.grey[900],
+                color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
                 fontSize: { xs: "12px", sm: "14px" },
                 fontWeight: "bold",
                 px: { xs: 2, sm: 3 },
@@ -215,7 +216,21 @@ const AdminDashboard = () => {
               label="Attendance Date"
               value={date}
               onChange={(newDate) => setDate(newDate)}
-              renderInput={(params) => <TextField {...params} fullWidth />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: params.InputProps.endAdornment &&
+                      React.cloneElement(params.InputProps.endAdornment, {
+                        style: {
+                          color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900],
+                        },
+                      }),
+                  }}
+                />
+              )}
             />
           </LocalizationProvider>
         </Grid>
@@ -223,7 +238,17 @@ const AdminDashboard = () => {
           <Button
             variant="contained"
             onClick={fetchAttendanceData}
-            sx={{ backgroundColor: colors.greenAccent[500], width: '100%', mt: { xs: 2, sm: 0 } }}
+            color="inherit"
+            sx={{
+              backgroundColor: colors.greenAccent[500],
+              width: '100%',
+              mt: { xs: 2, sm: 0 },
+              color: '#fff !important',
+              '&:hover': {
+                backgroundColor: colors.greenAccent[700],
+                color: '#fff !important',
+              },
+            }}
           >
             Get Attendance
           </Button>
@@ -254,7 +279,13 @@ const AdminDashboard = () => {
             color: `${colors.greenAccent[200]} !important`,
           },
           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
+            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
+          },
+          "& .MuiDataGrid-iconButtonContainer .MuiSvgIcon-root": {
+            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
+          },
+          "& .MuiDataGrid-sortIcon": {
+            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
           },
         }}
       >
@@ -280,7 +311,20 @@ const AdminDashboard = () => {
               value={date}
               onChange={(newDate) => setDate(newDate)}
               renderInput={(params) => (
-                <TextField fullWidth sx={{ mt: 2 }} {...params} />
+                <TextField
+                  fullWidth
+                  sx={{ mt: 2 }}
+                  {...params}
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: params.InputProps.endAdornment &&
+                      React.cloneElement(params.InputProps.endAdornment, {
+                        style: {
+                          color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900],
+                        },
+                      }),
+                  }}
+                />
               )}
             />
           </LocalizationProvider>
@@ -296,8 +340,22 @@ const AdminDashboard = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleSubmit}>
+          <Button
+            onClick={() => setDialogOpen(false)}
+            sx={{
+              backgroundColor: theme.palette.mode === 'dark' ? colors.blueAccent[700] : colors.blueAccent[500],
+              color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900],
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            sx={{
+              backgroundColor: theme.palette.mode === 'dark' ? colors.greenAccent[600] : colors.greenAccent[400],
+              color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900],
+            }}
+          >
             {dialogType === "check-in" ? "Submit Check-In" : "Submit Check-Out"}
           </Button>
         </DialogActions>

@@ -162,10 +162,10 @@ const Sidebar = () => {
                 </Typography>
                 <p>Monthly Worked Status</p>
                 <Typography variant="h6" color={colors.grey[300]}>
-                  Total Days: {summaryData?.totalDays || 0}
+                  Total Work Days: {summaryData?.totalDays || 0}
                 </Typography>
                 <Typography variant="h6" color={colors.grey[300]}>
-                  Total Hours: {formatHours(summaryData?.totalHours || "0")}
+                  Total Work Hours: {formatHours(summaryData?.totalHours || "0")}
                 </Typography>
                 <Typography variant="h6" color={colors.grey[300]}>
                   Average Daily Hours:{" "}
