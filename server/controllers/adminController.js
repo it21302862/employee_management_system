@@ -107,11 +107,11 @@ export async function allLogs(req, res) {
       note: { $nin: [null, ""] }
     })
     .sort({ timestamp: -1 })
-    .populate("user", "employeeId"); // populate only employeeId from User model
+    .populate("user", "employeeId"); 
 
     const formattedLogs = logs.map(log => ({
       _id: log._id,
-      empId: log.user?.employeeId || "—", // use populated employeeId here
+      empId: log.user?.employeeId || "—", 
       type: log.type,
       date: moment(log.timestamp).format("YYYY-MM-DD"),
       time: moment(log.timestamp).format("HH:mm:ss"),
@@ -127,13 +127,9 @@ export async function allLogs(req, res) {
 
 export async function workingHoursPerMonth(req, res) {
   try {
-    // Fetch all users (employees only)
     const users = await User.find({ role: "employee" });
-
-    // Fetch all attendance logs
     const logs = await Attendance.find({}).sort({ timestamp: 1 });
 
-    // Group logs per user
     const userLogsMap = {};
 
     logs.forEach((log) => {
@@ -151,7 +147,6 @@ export async function workingHoursPerMonth(req, res) {
 
       const logs = userLogsMap[user._id.toString()] || [];
 
-      // Pair check-in and check-out
       for (let i = 0; i < logs.length - 1; i++) {
         const logIn = logs[i];
         const logOut = logs[i + 1];
@@ -160,7 +155,6 @@ export async function workingHoursPerMonth(req, res) {
           const inTime = moment(logIn.timestamp);
           const outTime = moment(logOut.timestamp);
 
-          // Check if same day and valid range
           if (outTime.isAfter(inTime) && outTime.diff(inTime, "hours") < 24) {
             const month = inTime.format("MMM");
 
@@ -171,12 +165,11 @@ export async function workingHoursPerMonth(req, res) {
             }
 
             monthlyData[month] += durationHours;
-            i++; // skip next log as it's already used
+            i++; 
           }
         }
       }
 
-      // Format for Nivo line chart
       const data = Object.entries(monthlyData).map(([month, hours]) => ({
         x: month,
         y: parseFloat(hours.toFixed(2))

@@ -9,7 +9,9 @@ router.get('/attendance', auth, authorize('admin'), allAttendance);
 router.get('/employees', auth, authorize('admin'), allEmployees);
 // to get checkin times
 router.get('/checkin-distribution', auth, authorize('admin'), checkinDistribution);
+//to get all user logs 
 router.get('/all-logs', auth, authorize('admin'), allLogs);
+//to get total working hours
 router.get('/working-hours', auth, authorize('admin'), workingHoursPerMonth);
 
 export default router; 
