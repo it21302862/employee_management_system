@@ -1,60 +1,139 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, useTheme, Avatar } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useTheme,
+  Avatar,
+  Button,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
 import axios from "axios";
-
-// Utility to convert to 12-hour time format
-const formatTime = (dateString) => {
-  const date = new Date(dateString);
-  if (isNaN(date)) return "Invalid";
-  return date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
-};
 
 const Team = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [employees, setEmployees] = useState([]);
+  const [selectionModel, setSelectionModel] = useState([]);
+
+  // Snackbar state
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  // Dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
-  const fetchEmployees = async () => {
+    const fetchEmployees = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:8000/api/admin/employees",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const dataWithId = response.data.map((employee) => ({
+          id: employee.employeeId,
+          access: employee.role === "admin" ? "admin" : "emp",
+          ...employee,
+        }));
+
+        setEmployees(dataWithId);
+      } catch (error) {
+        console.error("Error fetching employees:", error);
+        setSnackbar({
+          open: true,
+          message: "Failed to fetch employees",
+          severity: "error",
+        });
+      }
+    };
+
+    fetchEmployees();
+  }, []);
+
+  // Open dialog on delete button click
+  const handleDeleteClick = () => {
+    if (selectionModel.length === 0) {
+      setSnackbar({
+        open: true,
+        message: "Please select at least one user to delete.",
+        severity: "warning",
+      });
+      return;
+    }
+    setDialogOpen(true);
+  };
+
+  // Confirm delete action
+  const handleConfirmDelete = async () => {
+    setDialogOpen(false);
+
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8000/api/admin/employees", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+
+      await Promise.all(
+        selectionModel.map((employeeId) =>
+          axios.delete(
+            `http://localhost:8000/api/admin/remove-user/${employeeId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+        )
+      );
+
+      setSnackbar({
+        open: true,
+        message: "Selected users deleted successfully",
+        severity: "success",
       });
 
-      const dataWithId = response.data.map((employee, index) => ({
-        id: index + 1,
-        access: employee.role === "admin" ? "admin" : "emp",
-        ...employee,
-      }));
-      
-      setEmployees(dataWithId);
+      setEmployees((prev) =>
+        prev.filter((emp) => !selectionModel.includes(emp.employeeId))
+      );
+      setSelectionModel([]);
     } catch (error) {
-      console.error("Error fetching employees:", error);
+      console.error("Error deleting users:", error);
+      setSnackbar({
+        open: true,
+        message: "Failed to delete some users",
+        severity: "error",
+      });
     }
   };
 
-  fetchEmployees();
-}, []);
+  const handleCancelDelete = () => {
+    setDialogOpen(false);
+  };
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") return;
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const columns = [
     {
       field: "profileImage",
-      headerName: "profile",
+      headerName: "Profile",
       width: 80,
       renderCell: ({ value }) => <Avatar src={value} alt="Profile" />,
       sortable: false,
@@ -105,8 +184,23 @@ const Team = () => {
   return (
     <Box m="20px">
       <Header title="TEAM" subtitle="Managing the Team Members" />
+
+      <Button
+        variant="contained"
+        disabled={selectionModel.length === 0}
+        onClick={handleDeleteClick}
+        sx={{
+          mb: 2,
+          color: `${
+            theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900]
+          } !important`,
+        }}
+      >
+        Delete Selected
+      </Button>
+
       <Box
-        mt="40px"
+        mt="10px"
         height="75vh"
         sx={{
           "& .MuiDataGrid-root": { border: "none" },
@@ -124,8 +218,62 @@ const Team = () => {
           },
         }}
       >
-        <DataGrid rows={employees} columns={columns} />
+        <DataGrid
+          rows={employees}
+          columns={columns}
+          checkboxSelection
+          onSelectionModelChange={(newSelection) => {
+            setSelectionModel(newSelection);
+          }}
+          selectionModel={selectionModel}
+          getRowId={(row) => row.employeeId}
+        />
       </Box>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={dialogOpen} onClose={handleCancelDelete}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete the selected user
+            {selectionModel.length > 1 ? "s" : ""}?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleCancelDelete}
+            sx={{
+              color:
+                theme.palette.mode === "dark"
+                  ? colors.grey[100]
+                  : colors.grey[900] + " !important",
+            }}
+          >
+            No
+          </Button>
+
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Snackbar for messages */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+          variant="filled"
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

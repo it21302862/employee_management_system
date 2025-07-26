@@ -257,3 +257,22 @@ export async function updateCheckIn(req, res) {
     return res.status(500).json({ msg: "Server error" });
   }
 }
+
+export async function removeUserAndLogs(req, res) {
+  const { employeeId } = req.params;
+
+  try {
+    const user = await User.findOne({ employeeId });
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    await Attendance.deleteMany({ user: user._id });
+    await User.findByIdAndDelete(user._id);
+
+    res.status(200).json({ msg: 'User and all associated attendance logs deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ msg: 'Server error while deleting user' });
+  }
+}

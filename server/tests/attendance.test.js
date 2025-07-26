@@ -61,22 +61,6 @@ describe("Attendance Routes", () => {
     jest.clearAllMocks();
   });
 
-  // test("POST /api/attendance/check-in - successful check-in", async () => {
-  //   Attendance.findOne.mockReturnValue({
-  //     exec: jest.fn().mockResolvedValue(null), 
-  //   });
-  //   Attendance.create.mockResolvedValue({ _id: "newId", note: "Morning shift" });
-
-  //   const res = await request(app)
-  //     .post("/api/attendance/check-in")
-  //     .set("Authorization", mockToken) 
-  //     .send({ note: "Morning shift" });
-
-  //   expect(res.status).toBe(201);
-  //   expect(res.body).toEqual({ msg: "Checked in successfully" });
-  //   expect(Attendance.create).toHaveBeenCalled(); 
-  // });
-
   test("POST /api/attendance/check-in - already checked in", async () => {
     Attendance.findOne.mockReturnValue({
       exec: jest.fn().mockResolvedValue({ _id: "existingId" }), 
@@ -90,22 +74,6 @@ describe("Attendance Routes", () => {
     expect(res.status).toBe(400);
     expect(res.body).toEqual({ msg: "Already checked in today" });
   });
-
-  // test("POST /api/attendance/check-out - successful check-out", async () => {
-  //   Attendance.findOne.mockReturnValue({
-  //     exec: jest.fn().mockResolvedValue(null), 
-  //   });
-  //   Attendance.create.mockResolvedValue({ _id: "newId" }); 
-
-  //   const res = await request(app)
-  //     .post("/api/attendance/check-out")
-  //     .set("Authorization", mockToken) 
-  //     .send({});
-
-  //   expect(res.status).toBe(201);
-  //   expect(res.body).toEqual({ msg: "Checked out successfully" });
-  //   expect(Attendance.create).toHaveBeenCalled(); 
-  // });
 
   test("POST /api/attendance/check-out - already checked out", async () => {
     Attendance.findOne.mockReturnValue({
