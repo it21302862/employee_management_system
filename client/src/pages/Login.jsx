@@ -42,19 +42,7 @@ export default function Login() {
           <form onSubmit={handleSubmit}>
             <h1 className="head">Sign In</h1>
 
-            <div className="social-container">
-              <a href="#" className="social">
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" className="social">
-                <i className="fab fa-google-plus-g"></i>
-              </a>
-              <a href="#" className="social">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
-            </div>
-
-            <span>or use your account</span>
+            <span>Welcome! Please login to your account</span>
 
             <div className="infield">
               <input

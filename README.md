@@ -20,6 +20,11 @@ The Employee Attendance Management System is a web application designed to help 
 ![Employee Profile](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/employee-card.png)
 ![Employee Logs](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/employee-logs.png)
 
+## Additional Features
+
+### Dark mode/Light Modes
+![Light Mode](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/light-mode.png)
+
 
 ## Features
 
