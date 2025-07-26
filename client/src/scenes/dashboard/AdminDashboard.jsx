@@ -136,17 +136,20 @@ const AdminDashboard = () => {
 
       console.log("Editing row:", editRow);
 
-  
       const payload = {
-        employeeId: editRow?.empId || null, 
+        employeeId: editRow?.empId || null,
         date: dateStr,
         checkInTime: formatToHHMM(startTime),
         checkOutTime: formatToHHMM(endTime),
       };
 
-      await axios.post("http://localhost:8000/api/admin/update-checkIn", payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.post(
+        "http://localhost:8000/api/admin/update-checkIn",
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       setAttendanceData((prev) =>
         prev.map((item) =>
@@ -249,9 +252,22 @@ const AdminDashboard = () => {
           variant="outlined"
           size="small"
           sx={{
-            color: "#fff",
-            borderColor: "#fff",
-            "&:hover": { borderColor: "#fff" },
+            color: (theme) =>
+              `${
+                theme.palette.mode === "dark"
+                  ? colors.grey[100]
+                  : colors.grey[400]
+              } !important`,
+            borderColor: (theme) =>
+              theme.palette.mode === "dark"
+                ? colors.grey[100]
+                : colors.grey[400],
+            "&:hover": {
+              borderColor: (theme) =>
+                theme.palette.mode === "dark"
+                  ? colors.grey[100]
+                  : colors.grey[400],
+            },
           }}
         >
           Edit
@@ -263,7 +279,12 @@ const AdminDashboard = () => {
   return (
     <Box sx={{ m: { xs: 1, sm: 2, md: 3 } }}>
       {/* HEADER */}
-      <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <Grid item xs={12} md={8}>
           <Header title="DASHBOARD" subtitle="Welcome to attendance records" />
         </Grid>
@@ -310,7 +331,12 @@ const AdminDashboard = () => {
       </Grid>
 
       {/* DATE PICKER TO LOAD ATTENDANCE */}
-      <Grid container alignItems="center" spacing={2} sx={{ mt: { xs: 2, md: 4 } }}>
+      <Grid
+        container
+        alignItems="center"
+        spacing={2}
+        sx={{ mt: { xs: 2, md: 4 } }}
+      >
         <Grid item xs={12} sm={6} md={4}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <DatePicker
@@ -327,7 +353,10 @@ const AdminDashboard = () => {
                       params.InputProps.endAdornment &&
                       React.cloneElement(params.InputProps.endAdornment, {
                         style: {
-                          color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900],
+                          color:
+                            theme.palette.mode === "dark"
+                              ? colors.grey[100]
+                              : colors.grey[900],
                         },
                       }),
                   }}
@@ -366,25 +395,53 @@ const AdminDashboard = () => {
           overflowX: "auto",
           "& .MuiDataGrid-root": { border: "none" },
           "& .MuiDataGrid-cell": { borderBottom: "none" },
-          "& .MuiDataGrid-columnHeaders": { backgroundColor: colors.blueAccent[700], borderBottom: "none" },
-          "& .MuiDataGrid-virtualScroller": { backgroundColor: colors.primary[400] },
-          "& .MuiDataGrid-footerContainer": { borderTop: "none", backgroundColor: colors.blueAccent[700] },
-          "& .MuiCheckbox-root": { color: `${colors.greenAccent[200]} !important` },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+          "& .MuiCheckbox-root": {
+            color: `${colors.greenAccent[200]} !important`,
+          },
           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900] + " !important",
+            color:
+              theme.palette.mode === "dark"
+                ? colors.grey[100]
+                : colors.grey[400] + " !important",
           },
           "& .MuiDataGrid-iconButtonContainer .MuiSvgIcon-root": {
-            color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900] + " !important",
+            color:
+              theme.palette.mode === "dark"
+                ? colors.grey[100]
+                : colors.grey[400] + " !important",
           },
           "& .MuiDataGrid-sortIcon": {
-            color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900] + " !important",
+            color:
+              theme.palette.mode === "dark"
+                ? colors.grey[100]
+                : colors.grey[400] + " !important",
           },
         }}
       >
-        <Typography variant="h5" color={colors.grey[100]} mb={2} sx={{ fontSize: { xs: "1.1rem", sm: "1.5rem" } }}>
+        <Typography
+          variant="h5"
+          color={colors.grey[100]}
+          mb={2}
+          sx={{ fontSize: { xs: "1.1rem", sm: "1.5rem" } }}
+        >
           Attendance Summary
         </Typography>
-        <DataGrid rows={attendanceData} columns={columns} components={{ Toolbar: GridToolbar }} />
+        <DataGrid
+          rows={attendanceData}
+          columns={columns}
+          components={{ Toolbar: GridToolbar }}
+        />
       </Box>
 
       {/* POPUP DIALOG */}
@@ -414,7 +471,10 @@ const AdminDashboard = () => {
                         params.InputProps.endAdornment &&
                         React.cloneElement(params.InputProps.endAdornment, {
                           style: {
-                            color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900],
+                            color:
+                              theme.palette.mode === "dark"
+                                ? colors.grey[100]
+                                : colors.grey[900],
                           },
                         }),
                     }}
@@ -436,7 +496,10 @@ const AdminDashboard = () => {
                         params.InputProps.endAdornment &&
                         React.cloneElement(params.InputProps.endAdornment, {
                           style: {
-                            color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900],
+                            color:
+                              theme.palette.mode === "dark"
+                                ? colors.grey[100]
+                                : colors.grey[900],
                           },
                         }),
                     }}
@@ -473,7 +536,9 @@ const AdminDashboard = () => {
         </Dialog>
       ) : (
         <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-          <DialogTitle>{dialogType === "check-in" ? "Check In" : "Check Out"}</DialogTitle>
+          <DialogTitle>
+            {dialogType === "check-in" ? "Check In" : "Check Out"}
+          </DialogTitle>
           <DialogContent>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker
@@ -492,7 +557,10 @@ const AdminDashboard = () => {
                         params.InputProps.endAdornment &&
                         React.cloneElement(params.InputProps.endAdornment, {
                           style: {
-                            color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900],
+                            color:
+                              theme.palette.mode === "dark"
+                                ? colors.grey[100]
+                                : colors.grey[900],
                           },
                         }),
                     }}
@@ -516,8 +584,14 @@ const AdminDashboard = () => {
             <Button
               onClick={() => setDialogOpen(false)}
               sx={{
-                backgroundColor: theme.palette.mode === "dark" ? colors.blueAccent[700] : colors.blueAccent[500],
-                color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900],
+                backgroundColor:
+                  theme.palette.mode === "dark"
+                    ? colors.blueAccent[700]
+                    : colors.blueAccent[500],
+                color:
+                  theme.palette.mode === "dark"
+                    ? colors.grey[100]
+                    : colors.grey[400],
               }}
             >
               Cancel
@@ -525,11 +599,19 @@ const AdminDashboard = () => {
             <Button
               onClick={handleSubmit}
               sx={{
-                backgroundColor: theme.palette.mode === "dark" ? colors.greenAccent[600] : colors.greenAccent[400],
-                color: theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900],
+                backgroundColor:
+                  theme.palette.mode === "dark"
+                    ? colors.greenAccent[600]
+                    : colors.greenAccent[400],
+                color:
+                  theme.palette.mode === "dark"
+                    ? colors.grey[100]
+                    : colors.grey[400],
               }}
             >
-              {dialogType === "check-in" ? "Submit Check-In" : "Submit Check-Out"}
+              {dialogType === "check-in"
+                ? "Submit Check-In"
+                : "Submit Check-Out"}
             </Button>
           </DialogActions>
         </Dialog>
@@ -542,7 +624,12 @@ const AdminDashboard = () => {
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleSnackbarClose} severity="success" variant="filled" sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>

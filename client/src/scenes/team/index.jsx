@@ -192,7 +192,7 @@ const Team = () => {
         sx={{
           mb: 2,
           color: `${
-            theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[900]
+            theme.palette.mode === "dark" ? colors.grey[100] : colors.grey[400]
           } !important`,
         }}
       >
@@ -246,7 +246,7 @@ const Team = () => {
               color:
                 theme.palette.mode === "dark"
                   ? colors.grey[100]
-                  : colors.grey[900] + " !important",
+                  : colors.grey[400] + " !important",
             }}
           >
             No

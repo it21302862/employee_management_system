@@ -100,7 +100,7 @@ const MyLogs = () => {
             color: `${colors.greenAccent[200]} !important`,
           },
           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
+            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400]} !important`,
           },
         }}
       >

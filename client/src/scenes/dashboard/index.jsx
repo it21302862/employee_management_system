@@ -173,7 +173,7 @@ const Dashboard = () => {
             <Button
               sx={{
                 backgroundColor: colors.blueAccent[700],
-                color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
+                color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400]} !important`,
                 fontSize: { xs: "12px", sm: "14px" },
                 fontWeight: "bold",
                 px: { xs: 2, sm: 3 },
@@ -187,7 +187,7 @@ const Dashboard = () => {
             <Button
               sx={{
                 backgroundColor: colors.greenAccent[600],
-                color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
+                color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400]} !important`,
                 fontSize: { xs: "12px", sm: "14px" },
                 fontWeight: "bold",
                 px: { xs: 2, sm: 3 },
@@ -222,7 +222,7 @@ const Dashboard = () => {
                     endAdornment: params.InputProps.endAdornment &&
                       React.cloneElement(params.InputProps.endAdornment, {
                         style: {
-                          color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900],
+                          color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400],
                         },
                       }),
                   }}
@@ -246,7 +246,7 @@ const Dashboard = () => {
             onClick={() => setDialogOpen(false)}
             sx={{
               backgroundColor: theme.palette.mode === 'dark' ? colors.blueAccent[700] : colors.blueAccent[500],
-              color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900],
+              color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400],
             }}
           >
             Cancel
@@ -255,7 +255,7 @@ const Dashboard = () => {
             onClick={handleSubmit}
             sx={{
               backgroundColor: theme.palette.mode === 'dark' ? colors.greenAccent[600] : colors.greenAccent[400],
-              color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900],
+              color: theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400],
             }}
           >
             {dialogType === "check-in" ? "Submit Check-In" : "Submit Check-Out"}
@@ -287,13 +287,13 @@ const Dashboard = () => {
             color: `${colors.greenAccent[200]} !important`,
           },
           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
+            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400]} !important`,
           },
           "& .MuiDataGrid-iconButtonContainer .MuiSvgIcon-root": {
-            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
+            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400]} !important`,
           },
           "& .MuiDataGrid-sortIcon": {
-            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[900]} !important`,
+            color: `${theme.palette.mode === 'dark' ? colors.grey[100] : colors.grey[400]} !important`,
           },
         }}
       >

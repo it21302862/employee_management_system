@@ -1,134 +1,355 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css');
 
-* {
+
+
+.register-container * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
-/* body {
-  font-family: 'Poppins', sans-serif;
-  background: #f6f5f7;
+.register-container {
+  background: #141b2d;
+  display: flex;
   justify-content: center;
-  align-items: center;
-  height: 80vh;
-  display: grid;
-  place-items: center;
-} */
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 40px 0;
+}
 
-.container {
+.register-container .container {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
               0 10px 10px rgba(0, 0, 0, 0.22);
-  position: relative;
-  overflow: hidden;
-  width: 768px;
-  max-width: 100%;
-  min-height: 480px;
-  max-height: 80vh;
-  margin-left: 400px;
-  margin-top: 70px;
+  width: 90%;
+  max-width: 1000px;
   display: flex;
-  justify-content: center;
+  overflow: hidden;
+  min-height: 600px;
+  margin-left: 500px;
 }
 
-.form-container {
-  padding: 60px 50px;
+.register-container .form-container {
   flex: 1;
-}
-
-form {
-  background: #fff;
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  padding: 0 50px;
-  height: 100%;
-  justify-content: center;
-  text-align: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  max-height: 100%;
 }
 
-.head{
+
+.register-container form {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 480px; 
+  padding-right: 10px;
+}
+
+
+.register-container form::-webkit-scrollbar {
+  width: 6px;
+}
+.register-container form::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 5px;
+}
+
+.register-container .head {
   font-weight: bold;
-  margin-bottom: 20px;
-  color:#333
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+  font-size: 28px;
 }
 
-
-
-.social-container {
-  margin: 20px 0;
+.register-container .social-container {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
-.social-container a {
+.register-container .social-container a {
   border: 1px solid #ddd;
   border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 5px;
   height: 40px;
   width: 40px;
-  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #333;
+  transition: 0.3s ease;
+  text-decoration: none;
 }
 
-.infield {
-  position: relative;
+.register-container .social-container a:hover {
+  background-color: #ddd;
+  color: #243B55;
+}
+
+.register-container span {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.register-container .infield {
   margin: 10px 0;
 }
 
-input {
+.register-container input,
+.register-container select {
+  width: 100%;
   background: #eee;
   border: none;
-  padding: 12px 15px;
-  width: 100%;
   border-radius: 5px;
-  margin: 8px 0;
+  padding: 12px;
+  font-size: 14px;
 }
 
-button {
-  border-radius: 20px;
-  border: 1px solid #243B55;
+.register-container button {
   background: linear-gradient(to right, #141E30, #243B55);
   color: #fff;
-  font-size: 14px;
-  padding: 12px 45px;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 16px;
   margin-top: 20px;
   cursor: pointer;
-  transition: transform 80ms ease-in;
+  transition: 0.3s ease;
+  width: 100%;
 }
 
-button:active {
-  transform: scale(0.95);
+.register-container button:active {
+  transform: scale(0.98);
 }
 
-button:focus {
+.register-container button:focus {
   outline: none;
 }
 
-button.ghost {
+.register-container button.ghost {
   background-color: transparent;
-  border-color: #fff;
+  border: 1px solid #fff;
 }
 
-.overlay-container {
+.register-container .error {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.register-container .overlay-container {
+  flex: 1;
   background: linear-gradient(to right, #141E30, #243B55);
   color: #fff;
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 50px;
+  padding: 40px;
 }
 
-.overlay-panel {
+.register-container .overlay-panel {
   text-align: center;
 }
 
-.forgot {
+.register-container .overlay-panel h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.register-container .overlay-panel p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.register-container .forgot {
   font-size: 12px;
   color: #555;
+  text-align: center;
+  text-decoration: none;
   margin-top: 10px;
+  display: block;
+}
+
+/* Scoped Styles for Login Component */
+.login-container * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.login-container {
+  background: #f6f5f7;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 40px 0;
+    margin-left: 100px;
+}
+
+.login-container .container {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+              0 10px 10px rgba(0, 0, 0, 0.22);
+  width: 90%;
+  max-width: 1000px;
+  display: flex;
+  overflow: hidden;
+  min-height: 600px;
+
+}
+
+.login-container .form-container {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 100%;
+  padding-right: 10px;
+}
+
+.login-container form::-webkit-scrollbar {
+  width: 6px;
+}
+.login-container form::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 5px;
+}
+
+.login-container .head {
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+  font-size: 28px;
+}
+
+.login-container .social-container {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.login-container .social-container a {
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  transition: 0.3s ease;
   text-decoration: none;
 }
 
+.login-container .social-container a:hover {
+  background-color: #ddd;
+  color: #243B55;
+}
+
+.login-container span {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.login-container .infield {
+  margin: 10px 0;
+}
+
+.login-container input,
+.login-container select {
+  width: 100%;
+  background: #eee;
+  border: none;
+  border-radius: 5px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.login-container button {
+  background: linear-gradient(to right, #141E30, #243B55);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  width: 100%;
+}
+
+.login-container button:active {
+  transform: scale(0.98);
+}
+
+.login-container button:focus {
+  outline: none;
+}
+
+.login-container button.ghost {
+  background-color: transparent;
+  border: 1px solid #fff;
+}
+
+.login-container .error {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.login-container .overlay-container {
+  flex: 1;
+  background: linear-gradient(to right, #141E30, #243B55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.login-container .overlay-panel {
+  text-align: center;
+}
+
+.login-container .overlay-panel h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.login-container .overlay-panel p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.login-container .forgot {
+  font-size: 12px;
+  color: #555;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 10px;
+  display: block;
+}
