@@ -187,3 +187,75 @@ export async function workingHoursPerMonth(req, res) {
     res.status(500).json({ msg: "Server error" });
   }
 }
+
+export async function updateCheckIn(req, res) {
+  try {
+    const { employeeId, date, checkInTime, checkOutTime } = req.body;
+
+    if (!employeeId) {
+      return res.status(400).json({ msg: "Employee ID is required" });
+    }
+
+    if (!date) {
+      return res.status(400).json({ msg: "Date is required" });
+    }
+
+    // Find user by employeeId
+    const user = await User.findOne({ employeeId });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found for this Employee ID" });
+    }
+
+    // Parse date to Date object at 00:00:00 UTC
+    const baseDate = new Date(date + "T00:00:00Z");
+
+    // Helper to build full ISO timestamp from date + time string "HH:mm"
+    const buildTimestamp = (base, timeStr) => {
+      if (!timeStr) return null;
+      const [hour, minute] = timeStr.split(":").map(Number);
+      const d = new Date(base);
+      d.setUTCHours(hour, minute, 0, 0);
+      return d;
+    };
+
+    const checkInTimestamp = buildTimestamp(baseDate, checkInTime);
+    const checkOutTimestamp = buildTimestamp(baseDate, checkOutTime);
+
+    // Upsert check-in doc
+    if (checkInTimestamp) {
+      await Attendance.findOneAndUpdate(
+        {
+          user: user._id,
+          type: "check-in",
+          timestamp: {
+            $gte: baseDate,
+            $lt: new Date(baseDate.getTime() + 24 * 60 * 60 * 1000),
+          },
+        },
+        { $set: { timestamp: checkInTimestamp, updatedAt: new Date() } },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      );
+    }
+
+    // Upsert check-out doc
+    if (checkOutTimestamp) {
+      await Attendance.findOneAndUpdate(
+        {
+          user: user._id,
+          type: "check-out",
+          timestamp: {
+            $gte: baseDate,
+            $lt: new Date(baseDate.getTime() + 24 * 60 * 60 * 1000),
+          },
+        },
+        { $set: { timestamp: checkOutTimestamp, updatedAt: new Date() } },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      );
+    }
+
+    return res.json({ msg: "Attendance times updated successfully" });
+  } catch (err) {
+    console.error("Error updating attendance:", err);
+    return res.status(500).json({ msg: "Server error" });
+  }
+}

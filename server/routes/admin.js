@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const router = Router();
-import { allAttendance, allEmployees, checkinDistribution, allLogs, workingHoursPerMonth} from '../controllers/adminController.js';
+import { allAttendance, allEmployees, checkinDistribution, allLogs, workingHoursPerMonth, updateCheckIn} from '../controllers/adminController.js';
 import { auth, authorize } from '../middleware/auth.js';
 
 // View all attendance logs
@@ -13,5 +13,7 @@ router.get('/checkin-distribution', auth, authorize('admin'), checkinDistributio
 router.get('/all-logs', auth, authorize('admin'), allLogs);
 //to get total working hours
 router.get('/working-hours', auth, authorize('admin'), workingHoursPerMonth);
+//update checking and checkout time for an user
+router.post('/update-checkIn', auth, authorize('admin'), updateCheckIn);
 
 export default router; 
