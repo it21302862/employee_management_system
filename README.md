@@ -4,6 +4,23 @@
 
 The Employee Attendance Management System is a web application designed to help organizations track employee attendance efficiently. It supports role-based access with Admin and Employee users. Employees can mark check-ins and check-outs, while admins can view and manage attendance records and reports.
 
+## Screenshots
+
+### Admin Dashboard
+![Admin Home ](![Admin Manage Members](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/admin-manage-members.png))
+![Admin Manage Members](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/admin-manage-members.png)
+![Admin Charts](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/admin-charts.png)
+
+### Employee Dashboard
+![Employee Home ](![Employee Home](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/employee-home.png))
+![Employee Check-In Check-Out](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/employee-check-in.png)
+![Employee Profile](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/employee-card.png)
+![Employee Logs](https://github.com/it21302862/employee_management_system/blob/main/client/public/assets/employee-logs.png)
+
+
+### Check-In Page (Employee View)
+![Check-In Page](./client/public/screenshots/checkin.png)
+
 ## Features
 
 ### User Roles
