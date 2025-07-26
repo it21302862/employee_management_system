@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import {
   Box,
@@ -8,7 +8,7 @@ import {
   Drawer,
   useMediaQuery,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; 
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -23,15 +23,15 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-import { useAuth } from "../../context/AuthContext";
 import HistoryIcon from "@mui/icons-material/History";
+import LogoutIcon from "@mui/icons-material/Logout"; 
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  // Clone the icon and inject a color prop
   const coloredIcon =
     icon &&
     (typeof icon.type === "function"
@@ -69,6 +69,7 @@ const Sidebar = () => {
   const [summaryData, setSummaryData] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSummary = async () => {
@@ -102,11 +103,24 @@ const Sidebar = () => {
     return result.trim() || "0 min";
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   const sidebarContent = (
     <Box
       sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between", 
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
@@ -192,10 +206,11 @@ const Sidebar = () => {
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   {user?.position || ""}
                 </Typography>
-                <p>Monthly Worked Status</p>
                 <Typography variant="h6" color={colors.grey[300]}>
-                  Total Work Days: {summaryData?.totalDays || 0}
+                  Total Work Days:{" "}
+                  <strong>{summaryData?.totalDays || 0}</strong>/40
                 </Typography>
+
                 <Typography variant="h6" color={colors.grey[300]}>
                   Total Work Hours:{" "}
                   {formatHours(summaryData?.totalHours || "0")}
@@ -207,7 +222,8 @@ const Sidebar = () => {
               </Box>
             </Box>
           )}
-
+          <hr />
+          <br />
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
@@ -357,6 +373,17 @@ const Sidebar = () => {
                 setSelected={setSelected}
               />
             )}
+          </Box>
+
+          {/* Logout Button at the bottom */}
+          <Box sx={{ mt: "auto", mb: 2, px: 2 }}>
+            <MenuItem
+              icon={<LogoutIcon sx={{ color: colors.grey[100] }} />}
+              onClick={handleLogout}
+              style={{ color: colors.grey[100], cursor: "pointer" }}
+            >
+              <Typography>Logout</Typography>
+            </MenuItem>
           </Box>
         </Menu>
       </ProSidebar>
