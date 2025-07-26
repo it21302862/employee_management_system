@@ -206,20 +206,18 @@ export async function updateCheckIn(req, res) {
       return res.status(404).json({ msg: "User not found for this Employee ID" });
     }
 
-    // Parse date to Date object at 00:00:00 UTC
-    const baseDate = new Date(date + "T00:00:00Z");
+    const baseDate = new Date(date); 
 
-    // Helper to build full ISO timestamp from date + time string "HH:mm"
-    const buildTimestamp = (base, timeStr) => {
+    const buildLocalTimestamp = (base, timeStr) => {
       if (!timeStr) return null;
       const [hour, minute] = timeStr.split(":").map(Number);
       const d = new Date(base);
-      d.setUTCHours(hour, minute, 0, 0);
+      d.setHours(hour, minute, 0, 0); 
       return d;
     };
 
-    const checkInTimestamp = buildTimestamp(baseDate, checkInTime);
-    const checkOutTimestamp = buildTimestamp(baseDate, checkOutTime);
+    const checkInTimestamp = buildLocalTimestamp(baseDate, checkInTime);
+    const checkOutTimestamp = buildLocalTimestamp(baseDate, checkOutTime);
 
     // Upsert check-in doc
     if (checkInTimestamp) {
