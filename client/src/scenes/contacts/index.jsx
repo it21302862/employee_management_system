@@ -22,7 +22,7 @@ const Contacts = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token"); 
-        const res = await axios.get("http://localhost:8000/api/profile/me", {
+        const res = await axios.get("api/profile/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

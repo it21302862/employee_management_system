@@ -32,7 +32,7 @@ const EmployeeLogs = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/admin/all-logs",
+        "api/admin/all-logs",
         {
           headers: {
             Authorization: `Bearer ${token}`,

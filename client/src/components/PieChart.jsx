@@ -15,7 +15,7 @@ const PieChart = () => {
     const fetchMonthlySummary = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/attendance/dash-monthly-summary",
+          "api/attendance/dash-monthly-summary",
           {
             headers: {
               Authorization: `Bearer ${token}`,

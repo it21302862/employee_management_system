@@ -32,7 +32,7 @@ const MyLogs = () => {
 
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/attendance/my-logs",
+        "api/attendance/my-logs",
         {
           headers: {
             Authorization: `Bearer ${token}`,

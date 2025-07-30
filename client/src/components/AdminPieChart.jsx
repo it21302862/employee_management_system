@@ -15,7 +15,7 @@ const AdminPieChart = () => {
     const fetchCheckInDistribution = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/admin/checkin-distribution",
+          "api/admin/checkin-distribution",
           {
             headers: {
               Authorization: `Bearer ${token}`,

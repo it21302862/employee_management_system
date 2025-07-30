@@ -76,7 +76,7 @@ const Sidebar = () => {
       try {
         const token = localStorage.getItem("token");
         const res = await axios.get(
-          "http://localhost:8000/api/attendance/summary?range=week",
+          "api/attendance/summary?range=week",
           {
             headers: {
               Authorization: `Bearer ${token}`,

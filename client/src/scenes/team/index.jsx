@@ -42,7 +42,7 @@ const Team = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:8000/api/admin/employees",
+          "api/admin/employees",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ const Team = () => {
       await Promise.all(
         selectionModel.map((employeeId) =>
           axios.delete(
-            `http://localhost:8000/api/admin/remove-user/${employeeId}`,
+            `api/admin/remove-user/${employeeId}`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }

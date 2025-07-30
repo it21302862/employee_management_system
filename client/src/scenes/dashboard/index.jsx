@@ -48,7 +48,7 @@ const Dashboard = () => {
   const fetchAttendanceData = () => {
     const token = localStorage.getItem("token");
     axios
-      .get("http://localhost:8000/api/attendance/dash-summary", {
+      .get("api/attendance/dash-summary", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -81,7 +81,7 @@ const Dashboard = () => {
 
     try {
       await axios.post(
-        `http://localhost:8000/api/attendance/${dialogType}`,
+        `api/attendance/${dialogType}`,
         {
           date: date.toISOString().split("T")[0],
           note,

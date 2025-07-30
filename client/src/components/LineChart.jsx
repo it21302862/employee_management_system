@@ -14,7 +14,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
     const fetchWorkingHours = async () => {
       try {
         const token = localStorage.getItem("token"); // make sure token is saved here
-        const response = await axios.get("http://localhost:8000/api/admin/working-hours", {
+        const response = await axios.get("api/admin/working-hours", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

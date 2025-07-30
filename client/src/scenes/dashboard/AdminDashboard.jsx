@@ -57,7 +57,7 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("token");
     const selectedDate = date.toLocaleDateString("en-CA");
     axios
-      .get(`http://localhost:8000/api/admin/attendance?date=${selectedDate}`, {
+      .get(`api/admin/attendance?date=${selectedDate}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
@@ -92,7 +92,7 @@ const AdminDashboard = () => {
 
     try {
       await axios.post(
-        `http://localhost:8000/api/attendance/${dialogType}`,
+        `api/attendance/${dialogType}`,
         {
           date: date.toISOString().split("T")[0],
           note,
@@ -143,13 +143,23 @@ const AdminDashboard = () => {
         checkOutTime: formatToHHMM(endTime),
       };
 
-      await axios.post(
-        "http://localhost:8000/api/admin/update-checkIn",
-        payload,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axios.post("api/admin/update-checkIn", payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const calculateWorkingHours = (start, end) => {
+        if (!start || !end) return "—";
+
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+
+        const diffMs = endDate - startDate;
+        if (isNaN(diffMs) || diffMs < 0) return "—";
+
+        const hours = Math.floor(diffMs / (1000 * 60 * 60));
+        const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        return `${hours}h ${minutes}m`;
+      };
 
       setAttendanceData((prev) =>
         prev.map((item) =>
@@ -158,6 +168,7 @@ const AdminDashboard = () => {
                 ...item,
                 checkIn: startTime ? startTime.toISOString() : item.checkIn,
                 checkOut: endTime ? endTime.toISOString() : item.checkOut,
+                workingHours: calculateWorkingHours(startTime, endTime),
               }
             : item
         )
