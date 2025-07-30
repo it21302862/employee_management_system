@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./login.css";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -9,6 +11,12 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") return;
+    setOpenSnackbar(false);
+  };
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,7 +34,8 @@ export default function Login() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Login failed");
       login(data.user, data.token);
-      navigate("/");
+      setOpenSnackbar(true);
+      setTimeout(() => navigate("/"), 1500);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -91,6 +100,22 @@ export default function Login() {
           </div>
         </div>
       </div>
+
+      {/* Snackbar */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          You have been logged in successfully!
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 }

@@ -557,6 +557,7 @@ const AdminDashboard = () => {
                 value={date}
                 onChange={(newDate) => setDate(newDate)}
                 minDate={new Date()}
+                maxDate={new Date()} 
                 renderInput={(params) => (
                   <TextField
                     fullWidth
