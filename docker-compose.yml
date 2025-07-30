@@ -3,19 +3,26 @@ version: "3.9"
 services:
   server:
     build: ./server
+    container_name: server
     ports:
       - "8000:8000"
     volumes:
       - ./server:/app
+      - /app/node_modules
     working_dir: /app
-    command: npm run dev  
+    command: npm run dev
     environment:
       - NODE_ENV=development
+    networks:
+      - app-network
 
   client:
     build: ./client
+    container_name: client
     ports:
       - "5000:5000"
+    depends_on:
+      - server
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -23,3 +30,9 @@ services:
     command: npm start
     environment:
       - CHOKIDAR_USEPOLLING=true
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

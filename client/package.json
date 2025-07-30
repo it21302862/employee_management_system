@@ -68,5 +68,5 @@
     "ajv-keywords": "^5.1.0",
     "cross-env": "^7.0.3"
   },
-  "proxy": "http://localhost:8000/"
+  "proxy": "http://server:8000"
 }
